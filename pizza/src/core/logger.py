@@ -1,7 +1,8 @@
-
+import core.logEntry as logEntry
 from datetime import datetime
 import config
 import os
+
 
 ANSI_COLORS = {
     "black": "\033[38;5;232m",    
@@ -34,12 +35,7 @@ class logger:
         
     @staticmethod
     def _write(line):
-       log_file = os.path.join(config.cdirectory, 'logger.log')
-       try:
-           with open(log_file, 'a') as log:  
-               log.write(line + '\n')  
-       except Exception as e:
-          pass    
+       logEntry.log_entries.append(line)
 
     @staticmethod
     def _get_timestamp():
@@ -80,17 +76,3 @@ class logger:
     def warning(message):
         color = ANSI_COLORS.get(config.WARNING_COLOR, ANSI_COLORS["reset"])
         print(logger._format_message("warning", message, color))
-
-    @staticmethod
-    def clear_log():
-      log_file = os.path.join(config.cdirectory, 'logger.log')
-      
-      if os.path.exists(config.cdirectory):
-          try:
-              if os.path.exists(log_file):
-                  with open(log_file, 'w'): 
-                      pass
-          except Exception as e:
-              pass
-      else:
-          pass

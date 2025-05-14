@@ -1,12 +1,12 @@
 import discord
 from discord import app_commands
 import config
-import os
+from io import BytesIO
 from core.logger import logger
 from helpers.hardware import *
 from datetime import datetime
 import time
-
+from core.logEntry import log_entries
 
 def home():
     embed = discord.Embed(
@@ -106,11 +106,12 @@ class Dropper(discord.ui.Select):
             
             
           elif so == "log":
-              log_file = os.path.join(config.cdirectory, 'logger.log')
-              lC = None
-              with open(log_file, 'r') as f:
-                  lC = f.read()   
-                  
+              lC = ""
+              for l in log_entries:
+                  lC += f"{l}\n"
+              log_bytes = BytesIO(lC.encode("utf-8"))
+              log_bytes.seek(0)  
+              log_file = discord.File(log_bytes, filename=f"log_{datetime.now().date()}.log")
               ihatediscord = lC[:1750] + "..." if len(lC) > 1750 else lC
               embed = discord.Embed(title="Log", description=f"```{ihatediscord}```\n*(low level logs may be hidden)*", color=config.embedcolor)
               embed.set_footer(text=f"Log file {datetime.now().date()}")
@@ -131,7 +132,7 @@ class Log(discord.ui.Button):
         )
 
     async def callback(self, interaction: discord.Interaction):   
-        await interaction.response.send_message(file=discord.File(self.log))
+        await interaction.response.send_message(file=self.log)
         
 class Refresh(discord.ui.Button):
     def __init__(self):
@@ -141,11 +142,12 @@ class Refresh(discord.ui.Button):
         )
 
     async def callback(self, interaction: discord.Interaction):   
-         log_file = os.path.join(config.cdirectory, 'logger.log')
-         lC = None
-         with open(log_file, 'r') as f:
-             lC = f.read()   
-             
+         lC = ""
+         for l in log_entries:
+             lC += f"{l}\n"
+         log_bytes = BytesIO(lC.encode("utf-8"))
+         log_bytes.seek(0)  
+         log_file = discord.File(log_bytes, filename=f"log_{datetime.now().date()}.log")
          ihatediscord = lC[:1750] + "..." if len(lC) > 1750 else lC
          embed = discord.Embed(title="Log", description=f"```{ihatediscord}```\n*(low level logs may be hidden)*", color=config.embedcolor)
          embed.set_footer(text=f"Log file {datetime.now().date()}")

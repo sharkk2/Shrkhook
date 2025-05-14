@@ -1,6 +1,5 @@
 import config
 import glob, os
-import logging
 from core.logger import logger
  
 async def register_commands(bot):
@@ -20,9 +19,5 @@ async def register_commands(bot):
 
         except Exception as e:
             logger.error(f"{e}")
-            import traceback
-            traceback.print_exc()
-            logging.critical(e) 
             
     logger.info(f"Registered all commands ({total_commands})")
-    logging.info(f'Registered all commands ({total_commands})')

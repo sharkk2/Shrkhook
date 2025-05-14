@@ -1,6 +1,5 @@
 import config
 import glob, os
-import logging  
 from core.logger import logger
   
   
@@ -20,6 +19,4 @@ async def register_events(bot):
             logger.info(f"Registered {event_name}")
         except Exception as e:
             logger.fatal(e)        
-            logging.critical(e)
     logger.info(f"Registered all events ({total_events})")
-    logging.info(f'Registered all events ({total_events})')

@@ -1,10 +1,3 @@
-# ╔════════════════════╗
-# ║                    ║
-# ║   © Quantum Labs   ║
-# ║                    ║
-# ╚════════════════════╝
-
-
 import discord
 from datetime import datetime
 from discord.ext import commands
@@ -80,14 +73,11 @@ async def hey(ctx):
   
 
 async def main():
-    logger.clear_log()
     async with bot:      
        try:
          #if config.connectDB:
           # bot.mongoConnect = motor.motor_asyncio.AsyncIOMotorClient(config.mongouri)
-         
          await bot.start(config.token)
-         
        except Exception as e:   
          logger.fatal(e)
 

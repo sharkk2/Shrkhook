@@ -1,5 +1,6 @@
 import ctypes
 import threading
+from core.logger import logger     
 
 def _show_notification(title, msg, type=0):
     """Show a windows notification
@@ -21,9 +22,11 @@ def _show_notification(title, msg, type=0):
     if type not in notf:
         raise ValueError("Invalid notification type!")           
     
-          
-    MessageBox = ctypes.windll.user32.MessageBoxW 
-    MessageBox(None, f"{msg}", f"{title}", notf[type])   
+    try:      
+      MessageBox = ctypes.windll.user32.MessageBoxW 
+      MessageBox(None, f"{msg}", f"{title}", notf[type])
+    except Exception as e:
+      logger.error(e) 
     
 def show_notification(title, msg, type=0):   
     threading.Thread(target=_show_notification, args=(title, msg, type)).start()    

@@ -1,7 +1,7 @@
 import config
 import glob, os
-import logging  
 from core.logger import logger
+import traceback
   
   
 async def register_tasks(bot):
@@ -18,7 +18,7 @@ async def register_tasks(bot):
             task_name = module_path.split('.')[-1] 
             logger.info(f"Registered {task_name}")
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             logger.fatal(e)        
-            logging.critical(e)
     logger.info(f"Registered all loops ({total_loops})")
-    logging.info(f'Registered all task loops ({total_loops})')

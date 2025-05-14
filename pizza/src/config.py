@@ -8,6 +8,7 @@
 import discord
 from datetime import datetime
 import os
+import sys
 
 def get_token(input_string, key):
     return ''.join(chr(ord(c) ^ key) for c in input_string)
@@ -34,12 +35,11 @@ log_channel = 1296812933455810591
 ### ENV CONFIG ###
 
 directory = os.path.join(os.path.dirname(__file__), "commands")
-
 edirectory = os.path.join(os.path.dirname(__file__), "core/events")
-
 tdirectory = os.path.join(os.path.dirname(__file__), "core/loops")
-
-cdirectory = os.path.join(os.path.dirname(__file__), "cache")
+base_dir = sys._MEIPASS if getattr(sys, 'frozen', False) else os.path.dirname(__file__)
+   
+cdirectory = os.path.join(base_dir, "cache")
 
 folder_blacklist = [
     "views",

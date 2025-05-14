@@ -1,12 +1,11 @@
-import random
 import discord
 import psutil
+import random
+import config
+from core.logger import logger
 
 async def change_status(bot):
-    import config
-    from core.logger import logger
     status_data = random.choice(config.statuses)
-    
     if 'type' not in status_data:
         return ValueError("No status type found")
     
@@ -23,9 +22,6 @@ async def change_status(bot):
         
     activity = None
     act = status_data['activity']    
-    
-    total_cmds = 0
-    for cmd in bot.tree.walk_commands(): total_cmds += 1
     
     status_data['text'] = status_data['text'].replace('(r)', str(psutil.virtual_memory().percent))
     status_data['text'] = status_data['text'].replace('(c)', str(psutil.cpu_percent(interval=0.7)))
