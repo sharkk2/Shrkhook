@@ -18,7 +18,9 @@ cd = datetime.now().strftime('%Y-%m-%d %I.%M.%S')
 
 ### BOT CONFIG ###
 
-version = 'v1.0.3b NOSOCKET'
+intver = 1.4
+version = 'v1.4.0b NOSOCKET'
+attach_shortcut_name = "Win32Updater"
 prefix = 's.'
 mongouri = ''
 connectDB = False

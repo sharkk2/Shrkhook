@@ -3,17 +3,14 @@ from datetime import datetime
 from discord.ext import commands
 import asyncio
 import config
+import time
 from core.functions.sync_db import sync_db
 from core.logger import logger
+from core.functions.checkArgs import checkArgs
 
 
-prefix = config.prefix
-
-intents = discord.Intents().all()
-bot = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
+bot = commands.Bot(command_prefix=config.prefix, intents=discord.Intents().all(), case_insensitive=True)
 bot.remove_command('help')
-
-
 
 @bot.event
 async def on_ready():
@@ -27,10 +24,8 @@ async def on_ready():
      from core.handlers import commands, events, task_handler      
      from core.functions.bot.error import error
      from core.functions.bot.check_perms import check_perms
-     
      bot.error = error 
      bot.check_perms = check_perms
-     
      await commands.register_commands(bot) 
      await events.register_events(bot)
      await task_handler.register_tasks(bot)
@@ -41,8 +36,6 @@ async def on_ready():
          logger.info(f"Database synced successfully")     
        except Exception as e:
          logger.warning(f"Failed to sync database: {e}")
-         
-      
      try: 
        # bot.add_view(View())    
        ...
@@ -69,7 +62,6 @@ async def on_ready():
 @bot.command()
 async def hey(ctx):
   await ctx.send("ayo wsup")
-
   
 
 async def main():
@@ -79,8 +71,12 @@ async def main():
           # bot.mongoConnect = motor.motor_asyncio.AsyncIOMotorClient(config.mongouri)
          await bot.start(config.token)
        except Exception as e:   
-         logger.fatal(e)
+         logger.fatal(f"{e} Retrying in 5...")
+         time.sleep(5)
+         await main()
+
 
 if __name__ == "__main__":  
+  checkArgs()
   asyncio.run(main())              
   
