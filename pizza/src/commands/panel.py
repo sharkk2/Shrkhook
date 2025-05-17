@@ -8,6 +8,7 @@ from datetime import datetime
 import time
 from core.logEntry import log_entries
 from helpers.attach import *
+from helpers.network import Network
 
 def home():
     embed = discord.Embed(
@@ -108,7 +109,7 @@ class Dropper(discord.ui.Select):
             embed.set_footer(text=f"Some info may not be found | {config.version}")
             msg = await interaction.channel.fetch_message(m.message_id)
             if msg:
-              await msg.edit(embed=embed, view=Dropperview())
+              await msg.edit(embed=embed, view=Dropperview(network=Network()))
             
             
           elif so == "log":
@@ -169,15 +170,47 @@ class Refresh(discord.ui.Button):
          embed.set_footer(text=f"Log file {datetime.now().date()}")
          await interaction.response.edit_message(embed=embed, view=Dropperview(log=log_file))
                  
-         
+class networkbtn(discord.ui.Button):
+    def __init__(self, network: Network):
+        self.network = network
+        super().__init__(
+            label="Network info",
+            style=discord.ButtonStyle.primary,
+            emoji="🌐"
+        )
+
+    async def callback(self, interaction: discord.Interaction):   
+        description = (
+            "**Interface**\n"
+            f"> **SSID**: {self.network.ssid}\n"
+            f"> **Protocol**: `{self.network.protocol}`\n"
+            f"> **Security type**: `{self.network.security_type}`\n"
+            f"> **Network band**: {self.network.network_band}\n"
+            f"> **Network channel**: `{self.network.network_channel}`\n"
+            f"> **Link speed (Rx/Tx)**: `{self.network.link_speed}`\n"
+            f"> **Signal strength**: `{self.network.signal}`\n"
+            "**IP & DNS**\n"
+            f"> **IPv4 address**: `{self.network.ipv4_address}`\n"
+            f"> **IPv4 DNS servers**: `{', '.join(self.network.ipv4_dns_servers) if self.network.ipv4_dns_servers else 'N/A'}`\n"
+            f"> **Public IP**: `{self.network.public_ip}`\n"
+            "**Driver**\n"
+            f"> **Manufacturer**: {self.network.manufacturer}\n"
+            f"> **Description**: {self.network.description}\n"
+            f"> **Driver version**: `{self.network.driver_version}`"
+        )
+        embed = discord.Embed(title="Network", description=description, color=config.embedcolor)
+        embed.set_footer(text=f"Reclicking the button won't refresh")
+        await interaction.response.send_message(embed=embed, ephemeral=True)         
             
 class Dropperview(discord.ui.View):
-    def __init__(self, log=None):
+    def __init__(self, log=None, network=None):
         super().__init__(timeout=None) 
         self.add_item(Dropper())
         if log:
             self.add_item(Log(log))
             self.add_item(Refresh())
+        if network:
+            self.add_item(networkbtn(network))    
         
 
 @app_commands.command(name="panel", description="Control panel")

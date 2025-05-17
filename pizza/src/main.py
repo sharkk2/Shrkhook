@@ -7,10 +7,9 @@ import time
 from core.functions.sync_db import sync_db
 from core.logger import logger
 from core.functions.checkArgs import checkArgs
-
+from helpers.network import Network
 
 bot = commands.Bot(command_prefix=config.prefix, intents=discord.Intents().all(), case_insensitive=True)
-bot.remove_command('help')
 
 @bot.event
 async def on_ready():
@@ -50,11 +49,22 @@ async def on_ready():
        synced = await bot.tree.sync()  
        
        logger.info(f"Synced {len(synced)} command(s)") 
+       logchannel = await bot.fetch_channel(config.log_channel)
+       mentions = []
+       for ni in config.owner_ids:
+         u = await bot.fetch_user(ni)
+         mentions.append(u.mention)
+      
+       embed = discord.Embed(title="Connection established", description=f"**{bot.user.name}** is now online!", color=discord.Color.green())
+       network = Network()
+       embed.set_footer(text=f"IP: {network.public_ip}")
+       await logchannel.send(', '.join(mentions), embed=embed)    
      except Exception as e:
-       print(e)
+       logger.error(e)
+       
      if config.maintainance == True:  
         await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=f"Under Maintainance"))
-     
+  
    except Exception as e:
        logger.fatal(e)
 
@@ -75,8 +85,5 @@ async def main():
          time.sleep(5)
          await main()
 
-
-if __name__ == "__main__":  
-  checkArgs()
-  asyncio.run(main())              
-  
+checkArgs()
+asyncio.run(main())              
