@@ -9,8 +9,8 @@ cd = datetime.now().strftime('%Y-%m-%d %I.%M.%S')
 
 ### BOT CONFIG ###
 
-intver = 1.4
-version = 'v1.4.1b NOSOCKET'
+intver = 1.5
+version = 'v1.5.0b NOSOCKET'
 attach_shortcut_name = "Win32Updater"
 prefix = 's.'
 mongouri = ''
@@ -19,9 +19,9 @@ owner_ids = [1092548532180877415]
 main_guild = 1339949261756043336
 embedcolor = discord.Color.blurple()
 embederrorcolor = discord.Color.red()
-name = 'Zeft'
-token = "MT..."
-client_id = 1328005965844316211
+name = 'A1-DEV'
+token = "MTM..."
+client_id = 1373300686346911885
 log_channel = 1345766880308236389
 
 

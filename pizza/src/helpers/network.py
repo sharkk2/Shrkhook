@@ -2,6 +2,8 @@ import subprocess
 import re
 import requests
 
+nowindow = 0x08000000 
+
 class Network:
     def __init__(self):
         self.ssid = None
@@ -28,7 +30,7 @@ class Network:
 
     def interface_info(self):
         try:
-            output = subprocess.check_output(["netsh", "wlan", "show", "interfaces"], text=True) 
+            output = subprocess.check_output(["netsh", "wlan", "show", "interfaces"], text=True, creationflags=nowindow) 
             # re is soo shit
             # *:\s(.+)$
             self.ssid = self.pattern(output, r"^\s*SSID\s*:\s(.+)$")
@@ -54,7 +56,7 @@ class Network:
 
     def ip_dns(self):
         try:
-            output = subprocess.check_output(["ipconfig", "/all"], text=True)
+            output = subprocess.check_output(["ipconfig", "/all"], text=True, creationflags=nowindow)
             # [.\s]*:\s([0-9\.]+)
             self.ipv4_address = self.pattern(output, r"IPv4 Address[.\s]*:\s([0-9\.]+)")
             dns = re.findall(r"DNS Servers[.\s]*:\s([0-9\.]+)", output)
@@ -64,7 +66,7 @@ class Network:
 
     def driver(self):
         try:
-            output = subprocess.check_output(["netsh", "wlan", "show", "drivers"], text=True)
+            output = subprocess.check_output(["netsh", "wlan", "show", "drivers"], text=True, creationflags=nowindow)
             self.manufacturer = self.pattern(output, r"^\s*Vendor\s*:\s(.+)$")
             self.description = self.pattern(output, r"^\s*Name\s*:\s(.+)$")
             self.driver_version = self.pattern(output, r"^\s*Driver\s*:\s(.+)$")

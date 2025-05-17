@@ -48,7 +48,8 @@ class Canopener(discord.ui.Modal, title='Open'):
                    if size > 8 * 1024 * 1024:
                        await interaction.response.send_message("❌ | File is too large (max 8mb)", ephemeral=True)
                    else:
-                       await interaction.response.send_message(file=discord.File(target), ephemeral=True)
+                       await interaction.response.defer(ephemeral=True)
+                       await interaction.followup.send(file=discord.File(target), ephemeral=True)
                else:
                    await interaction.response.send_message("❌ | Not a valid file/directory", ephemeral=True)
            except Exception as e:
