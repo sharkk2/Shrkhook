@@ -1,18 +1,9 @@
-
-# Wave configuration file
-
-
-
 ### REQUIRED DATA ###
 
 import discord
 from datetime import datetime
 import os
 import sys
-
-def get_token(input_string, key):
-    return ''.join(chr(ord(c) ^ key) for c in input_string)
-
 
 cd = datetime.now().strftime('%Y-%m-%d %I.%M.%S')
 
@@ -29,7 +20,7 @@ main_guild = 1339949261756043336
 embedcolor = discord.Color.blurple()
 embederrorcolor = discord.Color.red()
 name = 'Zeft'
-token = get_token("𐽡𐽸𐽡𐼜𐽡𐽆𐽥𐽔𐽢𐽖𐽏𐽖𐽡𐽸𐽹𐼘𐽡𐽖𐽥𐼝𐽡𐽨𐽵𐽛𐽢𐽛𐼂𐽫𐽀𐽥𐽢𐽏𐽣𐼂𐼟𐼛𐼕𐼁𐽃𐼙𐽋𐽎𐽏𐼛𐽔𐽼𐽚𐽸𐽛𐽴𐼘𐽁𐽁𐽸𐼜𐼁𐽣𐽵𐽢𐼚𐽞𐽿𐽤𐽧𐽙𐽊𐼘𐽛𐽎𐽎𐽈𐼘", 69420) # I don't give a fck about this token
+token = "MT..."
 client_id = 1328005965844316211
 log_channel = 1345766880308236389
 
