@@ -6,6 +6,7 @@ import config
 
 @app_commands.command(name="screenshot", description="Take a screenshot")
 async def command(interaction: discord.Interaction):
+    await interaction.response.defer(thinking=True)
     screenshot = pyautogui.screenshot()
     b = BytesIO()
     screenshot.save(b, format="PNG")
@@ -13,7 +14,7 @@ async def command(interaction: discord.Interaction):
     
     embed = discord.Embed(title="Screenshot", color=config.embedcolor)
     embed.set_image(url="attachment://screenshot.png")
-    await interaction.response.send_message(embed=embed, file=discord.File(b, "screenshot.png"))
+    await interaction.followup.send(embed=embed, file=discord.File(b, "screenshot.png"))
     
 async def setup(bot):
     global Bot 

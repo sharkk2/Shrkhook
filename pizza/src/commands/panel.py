@@ -18,15 +18,20 @@ def home():
             "> `shutdown`: Shutdown the system\n"
             "> `execute`: Executes a command or powershell script\n"
             "> `notification`: Sends a windows notification\n"
-            "> `volume`: Changes system volume `(0-100%)`\n"
             "> `wallpaper`: Change system wallpaper (`12MB MAX` png, jpg, jpeg, bmp)\n"
+            "> `files`: File explorer (`8MB MAX` File download)\n"
             "**Sound**\n"
+            "> `volume`: Changes system volume `(0-100%)`\n"
             "> `playsound`: Plays a **.wav** sound `10MB MAX`\n"
             "> `tts`: Plays a text to speech sound using windows tts engine\n"
+            "> `beep`: Play a `3.5` seconds long beep at `1000Hz`\n"
             "**Misc**\n"
             "> `ping`: Ping the bot *(ref: 5-385ms)*\n"
             "> `screenshot`: Takes a screenshot\n"
-            "> `type`: Type a message with givin wpm *(words per minute)*"
+            "> `type`: Type a message with givin wpm *(words per minute)*\n"
+            "**Advanced**\n"
+            "> `clipboard`: Get or set clipboard contents\n"
+            "> `processes`: List running processes\n"
         ),
         color=config.embedcolor
     )
