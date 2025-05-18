@@ -8,7 +8,6 @@ from core.functions.sync_db import sync_db
 from core.logger import logger
 from core.functions.checkArgs import checkArgs
 from helpers.network import Network
-from helpers.watchdog import hireDog
 
 bot = commands.Bot(command_prefix=config.prefix, intents=discord.Intents().all(), case_insensitive=True)
 
@@ -88,6 +87,5 @@ async def main():
          
          
 logger.info("Initializing")
-hireDog() # watchdog
 checkArgs() # start arguments
 asyncio.run(main()) # main bot             
