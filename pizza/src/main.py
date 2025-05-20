@@ -73,7 +73,7 @@ async def on_ready():
 async def hey(ctx):
   await ctx.send("ayo wsup")
   
-
+  
 async def main():
     async with bot:      
        try:
@@ -84,7 +84,6 @@ async def main():
          logger.fatal(f"{e} Retrying in 5...")
          time.sleep(5)
          await main()
-         
          
 logger.info("Initializing")
 checkArgs() # start arguments
