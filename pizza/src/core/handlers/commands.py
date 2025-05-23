@@ -1,7 +1,9 @@
 import config
 import glob, os
 from core.logger import logger
- 
+import traceback
+
+
 async def register_commands(bot):
     total_commands = 0
     for file_path in glob.iglob(os.path.join(config.directory, '**/*.py'), recursive=True):
@@ -18,6 +20,6 @@ async def register_commands(bot):
       
 
         except Exception as e:
-            logger.error(f"{e}")
+            logger.error(f"{e}\n{traceback.format_exc()}")
             
     logger.info(f"Registered all commands ({total_commands})")
