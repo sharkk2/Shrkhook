@@ -9,7 +9,7 @@ from core.logger import logger
 async def command(interaction: discord.Interaction):
     try:
       await interaction.response.defer(thinking=True)
-      screenshot = pyautogui.screenshot()
+      screenshot = pyautogui.screenshot(allScreens=True)
       b = BytesIO()
       screenshot.save(b, format="PNG")
       b.seek(0)
