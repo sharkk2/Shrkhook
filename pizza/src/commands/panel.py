@@ -25,6 +25,7 @@ def home():
             "> `playsound`: Plays a **.wav** sound `10MB MAX`\n"
             "> `tts`: Plays a text to speech sound using windows tts engine\n"
             "> `beep`: Play a `3.5` seconds long beep at `1000Hz`\n"
+            "> `record`: Record mic audio (max 100 seconds) with ability to playback\n"
             "**Misc**\n"
             "> `ping`: Ping the bot *(ref: 0-450ms)*\n"
             "> `screenshot`: Takes a screenshot\n"
