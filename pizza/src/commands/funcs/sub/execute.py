@@ -8,10 +8,13 @@ from typing import Literal
 @app_commands.describe(script="The script to execute", script_type="Use powershell or cmd")
 async def command(interaction: discord.Interaction, script: str, script_type: Literal["cmd", "powershell"]):
     try:
+       startupinfo = subprocess.STARTUPINFO()
+       startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
        if script_type == "powershell":
-           result = subprocess.run(["powershell", "-Command", script], capture_output=True, text=True)
+           result = subprocess.run(["powershell", "-Command", script], capture_output=True, text=True, startupinfo=startupinfo)
        else:
-           result = subprocess.run(script, shell=True, capture_output=True, text=True)
+           result = subprocess.run(script, shell=True, capture_output=True, text=True, startupinfo=startupinfo)
        output = result.stdout
        error = False
        if len(output) == 0:

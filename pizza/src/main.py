@@ -9,6 +9,7 @@ from core.logger import logger
 from core.functions.checkArgs import checkArgs
 from helpers.network import Network
 
+
 bot = commands.Bot(command_prefix=config.prefix, intents=discord.Intents().all(), case_insensitive=True)
 
 @bot.event
@@ -25,6 +26,8 @@ async def on_ready():
      from core.functions.bot.check_perms import check_perms
      bot.error = error 
      bot.check_perms = check_perms
+     
+    
      await commands.register_commands(bot) 
      await events.register_events(bot)
      await task_handler.register_tasks(bot)

@@ -13,7 +13,10 @@ def get_location():
         Write-Output ('{"latitude":' + $location.Latitude + ',"longitude":' + $location.Longitude + '}')
         """
         
-        result = subprocess.run(["powershell", "-Command", ps_script], capture_output=True, text=True)
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        
+        result = subprocess.run(["powershell", "-Command", ps_script], capture_output=True, text=True, startupinfo=startupinfo)
         location_data = json.loads(result.stdout.strip())
         
         if "error" in location_data:
@@ -22,4 +25,3 @@ def get_location():
         return location_data
     except Exception as e:
        return None
-   

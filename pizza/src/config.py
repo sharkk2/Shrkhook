@@ -22,7 +22,7 @@ main_guild = 1339949261756043336
 embedcolor = discord.Color.blurple()
 embederrorcolor = discord.Color.red()
 name = 'A1-DEV'
-token = "MTM..."
+token = "MTM"
 client_id = 1373300686346911885
 log_channel = 1345766880308236389
 
