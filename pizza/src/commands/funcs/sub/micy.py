@@ -54,6 +54,6 @@ async def command(interaction: discord.Interaction, duration: int = 5):
       await Bot.error(interaction, Bot, e)
       
 async def setup(bot):
-    global Bot
+    global Bot 
     Bot = bot
-    bot.tree.add_command(command)
+    bot.tree.get_command("functions").add_command(command)    

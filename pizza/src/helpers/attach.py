@@ -21,6 +21,34 @@ def isDisabled():
         logger.error(f"Failed to check startup status: {e}")
         return None
 
+def unattach():
+    try:
+        startup_folder = os.path.join(
+            os.environ["APPDATA"],
+            r"Microsoft\Windows\Start Menu\Programs\Startup"
+        )
+        shortcut_path = os.path.join(startup_folder, f"{config.attach_shortcut_name}.lnk")
+        if os.path.exists(shortcut_path):
+            os.remove(shortcut_path)
+
+        try:
+            key = winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER,
+                r"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder",
+                0,
+                winreg.KEY_SET_VALUE
+            )
+            winreg.DeleteValue(key, f"{config.attach_shortcut_name}.lnk")
+            winreg.CloseKey(key)
+        except FileNotFoundError:
+            pass 
+        except Exception as e:
+            logger.warning(f"Failed to remove registry value: {e}")
+        return True, ""
+    except Exception as e:
+        logger.error(f"Unattach failed: {e}")
+        return False, str(e)
+
 
 def enable():
     try:

