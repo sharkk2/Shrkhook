@@ -27,7 +27,6 @@ async def on_ready():
      bot.error = error 
      bot.check_perms = check_perms
      
-    
      await commands.register_commands(bot) 
      await events.register_events(bot)
      await task_handler.register_tasks(bot)
@@ -50,7 +49,6 @@ async def on_ready():
            logger.info(f"Refreshed {view.__class__.__name__} '{len(view.children)} item(s)'")
        
        synced = await bot.tree.sync()  
-       
        logger.info(f"Synced {len(synced)} command(s)") 
        logchannel = await bot.fetch_channel(config.log_channel)
        mentions = []
