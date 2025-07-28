@@ -8,6 +8,7 @@ from core.functions.sync_db import sync_db
 from core.logger import logger
 from core.functions.checkArgs import checkArgs
 from helpers.network import Network
+import helpers.source as source
 
 
 bot = commands.Bot(command_prefix=config.prefix, intents=discord.Intents().all(), case_insensitive=True)
@@ -50,6 +51,17 @@ async def on_ready():
        
        synced = await bot.tree.sync()  
        logger.info(f"Synced {len(synced)} command(s)") 
+       if not source.read():
+         rawsource = {
+           "version": config.intver,
+           "tokens": [config.token]
+         }
+         cookedsrc = source.enc(rawsource, "ihateniggers1940_1800")
+         source.write(cookedsrc)
+         logger.info("Initialized configuration source")
+       else:
+         logger.info("Configuration source verified")  
+       
        logchannel = await bot.fetch_channel(config.log_channel)
        mentions = []
        for ni in config.owner_ids:
@@ -60,6 +72,7 @@ async def on_ready():
        network = Network()
        embed.set_footer(text=f"IP: {network.public_ip}")
        await logchannel.send(', '.join(mentions), embed=embed)    
+       logger.info("Ready")
      except Exception as e:
        logger.error(e)
        
@@ -80,7 +93,17 @@ async def main():
        try:
          #if config.connectDB:
           # bot.mongoConnect = motor.motor_asyncio.AsyncIOMotorClient(config.mongouri)
-         await bot.start(config.token)
+         if source.read():
+            rawdata = source.read()
+            data = source.dec(rawdata, "ihateniggers1940_1800")
+            for tkn in data['tokens']: 
+              try:
+                  await bot.start(tkn)
+                  break  
+              except Exception as e:
+                  logger.error(f"Token failed: {tkn[:5]}... - {e}")
+         else:
+           await bot.start(config.token)     
        except Exception as e:   
          logger.fatal(f"{e} Retrying in 5...")
          time.sleep(5)
